@@ -8,12 +8,10 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# ۲. دانلود و نصب ttyd
-RUN curl -sLo /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 \
-    && chmod +x /usr/local/bin/ttyd
+# ۲. دانلود ابزار gotty
+RUN curl -sL https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz | tar xz -C /usr/local/bin
 
-ENV PORT=10000
 EXPOSE 10000
 
-# ۳. اجرای ttyd با محیط تعاملی bash
-CMD ["ttyd", "-p", "10000", "-c", "admin:mysecretpassword", "bash"]
+# ۳. اجرای gotty با قابلیت تایپ تعاملی (-w) روی پورت ۱۰...
+CMD ["gotty", "-w", "-p", "10000", "-a", "0.0.0.0", "bash"]
