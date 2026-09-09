@@ -1,5 +1,6 @@
 FROM ubuntu:latest
 
+# ۱. نصب ابزارهای مورد نیاز
 RUN apt-get update && apt-get install -y \
     openssh-client \
     tmux \
@@ -7,10 +8,10 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sLo /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 \
-    && chmod +x /usr/local/bin/ttyd
+# ۲. دانلود gotty
+RUN curl -sL https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz | tar xz -C /usr/local/bin
 
 EXPOSE 10000
 
-# اضافه شدن پرچم -w برای فعال‌سازی کیبورد و تایپ
-CMD ["ttyd", "-w", "-p", "10000", "-c", "admin:mysecretpassword", "bash"]
+# ۳. اجرای gotty بدون کانفیگ اضافی
+CMD ["gotty", "-w", "-p", "10000", "-a", "0.0.0.0", "bash"]
